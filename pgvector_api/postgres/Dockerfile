@@ -1,18 +1,24 @@
-# Extend from PostgreSQL official image
-FROM postgres:15
+version: '3.8'
 
-# Install pgvector extension
-RUN apt-get update && apt-get install -y postgresql-contrib \
-    && apt-get install -y postgresql-server-dev-all \
-    && apt-get install -y gcc \
-    && apt-get install -y make \
-    && apt-get install -y git \
-    && git clone --depth 1 https://github.com/pgvector/pgvector /pgvector \
-    && cd /pgvector && make && make install
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5433"  # Expose the new internal port on the same port externally
+    networks:
+      - pg-api-net
+    command: ["postgres", "-p", "5433"]  # Tell PostgreSQL to listen on port 5433
 
-# Set environment variables for PostgreSQL
-ENV POSTGRES_DB=mydatabase
-ENV POSTGRES_USER=myuser
-ENV POSTGRES_PASSWORD=mypassword
+volumes:
+  pgdata:
 
-EXPOSE 5432
+networks:
+  pg-api-net:
+    driver: bridge
+
