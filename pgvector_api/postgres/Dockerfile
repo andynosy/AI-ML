@@ -1,24 +1,13 @@
-version: '3.8'
+# Extend from PostgreSQL official image
+FROM postgres:15
 
-services:
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: mydatabase
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5433:5433"  # Expose the new internal port on the same port externally
-    networks:
-      - pg-api-net
-    command: ["postgres", "-p", "5433"]  # Tell PostgreSQL to listen on port 5433
+# Set environment variables for PostgreSQL
+ENV POSTGRES_DB=mydatabase
+ENV POSTGRES_USER=myuser
+ENV POSTGRES_PASSWORD=mypassword
 
-volumes:
-  pgdata:
+# Expose the new port (5433) instead of the default 5432
+EXPOSE 5433
 
-networks:
-  pg-api-net:
-    driver: bridge
-
+# Start PostgreSQL and specify the port
+CMD ["postgres", "-p", "5433"]
