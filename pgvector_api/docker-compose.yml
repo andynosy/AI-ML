@@ -1,1 +1,39 @@
+version: '3.8'
+
+services:
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pg-api-net
+    command: ["postgres", "-c", "fsync=off"]
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      API_KEY: mysecretapikey
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - pg-api-net
+
+volumes:
+  pgdata:
+
+networks:
+  pg-api-net:
+    driver: bridge
 
