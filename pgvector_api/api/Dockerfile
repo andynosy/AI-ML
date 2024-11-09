@@ -1,4 +1,4 @@
-# Dockerfile.api for FastAPI
+# api/Dockerfile
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
 
 # Install psycopg2 for PostgreSQL connection
@@ -9,3 +9,4 @@ COPY . /app
 
 # Run on port 8080
 EXPOSE 8080
+
