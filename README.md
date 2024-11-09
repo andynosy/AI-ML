@@ -1,5 +1,3 @@
-Here’s a `README.md` file for your Dockerized PostgreSQL vector database with FastAPI:
-
 ---
 
 # pgvector API
